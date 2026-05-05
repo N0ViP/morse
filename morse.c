@@ -1,6 +1,20 @@
 #include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 #include "morse.h"
 
+int is_morse_char(int c)
+{
+    if (isalnum(c))
+        return (1);
+    if (c == '.' || c == ',' || c == '?' || c == '\'' ||
+        c == '!' || c == '/' || c == '(' || c == ')' ||
+        c == '&' || c == ':' || c == ';' || c == '=' ||
+        c == '+' || c == '-' || c == '_' || c == '"' ||
+        c == '$' || c == '@' || c == ' ')
+        return (1);
+    return (0);
+}
 
 void	help(void)
 {
@@ -9,6 +23,28 @@ void	help(void)
 	return ;
 }
 
+void encode(char *str)
+{
+	if (is_morse_char((unsigned char)*str))
+	{
+		printf("%s", morse_table[(unsigned char)*str]);
+		str++;
+	}
+	while (*str)
+	{
+		if (is_morse_char((unsigned char)*str))
+		{
+			printf(" %s", morse_table[(unsigned char)*str]);
+		}
+		str++;
+	}
+	printf("\n");
+}
+
+void decode(char *str)
+{
+	return ;
+}
 
 int main(int ac, char *av[])
 {
