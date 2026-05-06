@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include "morse.h"
@@ -23,19 +24,11 @@ void	help(void)
 	return ;
 }
 
-void encode(char *str)
+void encode(const char *str)
 {
 	unsigned char	c;
 
-	c = *str;
-	if (is_morse_char(c))
-	{
-		if (islower(c))
-			c = toupper(c);
-		printf("%s", morse_table[c]);
-		str++;
-	}
-	while (*str)
+	do
 	{
 		c = *str;
 		if (is_morse_char(c))
@@ -44,20 +37,49 @@ void encode(char *str)
 				c = toupper(c);
 			printf(" %s", morse_table[c]);
 		}
-		str++;
-	}
+	} while (*str++);
 	printf("\n");
 
 	return ;
 }
 
-void decode(char *str)
+void decode(const char *str)
 {
-	for (int i = 0, j; str[i]; i++)
+	char *code;
+
+	for (int i = 0, j, k; str[i]; )
 	{
-		for (j = 0; str[i + j] == ' ' || str[i + j]; j++)
+		while (isspace(str[i]) && str[i])
+			i++;
+
+		if (!str[i])
+			break ;
+
+		for (j = 0; !isspace(str[i + j]) && str[i + j]; j++)
 			;
 
+		code = malloc(j + 1);
+		if (!code)
+			exit (1);
+
+		code = memcpy(code, str + i, j);
+		code[j] = '\0';
+
+		for (k = 0; k < 128; k++)
+		{
+			if (morse_table[k] && !strcmp(code, morse_table[k]))
+			{
+				printf("%c", k);
+				break ;
+			}
+		}
+		if (k >= 128)
+		{
+			printf("#");
+		}
+
+		i += j;
+		free(code);
 	}
 
 	return ;
