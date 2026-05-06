@@ -25,24 +25,41 @@ void	help(void)
 
 void encode(char *str)
 {
-	if (is_morse_char((unsigned char)*str))
+	unsigned char	c;
+
+	c = *str;
+	if (is_morse_char(c))
 	{
-		printf("%s", morse_table[(unsigned char)*str]);
+		if (islower(c))
+			c = toupper(c);
+		printf("%s", morse_table[c]);
 		str++;
 	}
 	while (*str)
 	{
-		if (is_morse_char((unsigned char)*str))
+		c = *str;
+		if (is_morse_char(c))
 		{
-			printf(" %s", morse_table[(unsigned char)*str]);
+			if (islower(c))
+				c = toupper(c);
+			printf(" %s", morse_table[c]);
 		}
 		str++;
 	}
 	printf("\n");
+
+	return ;
 }
 
 void decode(char *str)
 {
+	for (int i = 0, j; str[i]; i++)
+	{
+		for (j = 0; str[i + j] == ' ' || str[i + j]; j++)
+			;
+
+	}
+
 	return ;
 }
 
