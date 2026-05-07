@@ -5,6 +5,7 @@
 #define HINTMSG	"morse: Try 'morse -h' for more information.\n"
 #define ERRMSG	"morse: Invalid option.\nTry 'morse -h' for more information.\n"
 
+#define UNIT 100000
 
 static const char *morse_table[128] = {
     ['A'] = ".-",    ['B'] = "-...",  ['C'] = "-.-.",  ['D'] = "-..",

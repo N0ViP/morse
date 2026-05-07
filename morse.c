@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -19,16 +20,42 @@ int is_morse_char(int c)
 
 void	help(void)
 {
-	// TODO
+	printf("Usage: morse [OPTION] STRING\n");
+	printf("\n");
+	printf("Options:\n");
+	printf("  -e    encode STRING into Morse code\n");
+	printf("  -d    decode Morse code STRING into text\n");
+	printf("  -h    show this help message\n");
+	printf("\n");
+	printf("Notes:\n");
+	printf("  - Use spaces to separate Morse symbols.\n");
+	printf("  - Use '/' to separate words in Morse.\n");
 
 	return ;
+}
+
+void sound_effect(const char *code)
+{
+	while (*code)
+	{
+		if (*code == '.')
+		{
+			system("paplay dot.wav");
+		}
+		else if (*code == '-')
+		{
+			system("paplay dash.wav");
+		}
+		usleep(UNIT);
+		code++;
+	}
 }
 
 void encode(const char *str)
 {
 	unsigned char	c;
 
-	do
+	while (*str)
 	{
 		c = *str;
 		if (is_morse_char(c))
@@ -36,8 +63,13 @@ void encode(const char *str)
 			if (islower(c))
 				c = toupper(c);
 			printf(" %s", morse_table[c]);
+			fflush(stdout);
+			sound_effect(morse_table[c]);
+			usleep(UNIT * 2);
 		}
-	} while (*str++);
+		str++;
+	}
+	usleep(UNIT * 2);
 	printf("\n");
 
 	return ;
@@ -87,7 +119,12 @@ void decode(const char *str)
 
 int main(int ac, char *av[])
 {
-	if (ac == 1 || ac > 3 || (ac == 2 && !strcmp(av[1], "-h")))
+	if (ac == 2 && !strcmp(av[1], "-h"))
+	{
+		help();
+		return (0);
+	}
+	if (ac == 1 || ac > 3)
 	{
 		dprintf(2, HINTMSG);
 		return (0);
